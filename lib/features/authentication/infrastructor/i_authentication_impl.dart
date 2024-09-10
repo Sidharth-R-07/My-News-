@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mynews/core/constants/firebase_collection_names.dart';
 import 'package:mynews/core/failures/failures.dart';
+import 'package:mynews/core/services/local_storage_services.dart';
 import 'package:mynews/core/utils/typedef/app_typedef.dart';
 import 'package:mynews/features/authentication/domain/i_authentication_facade.dart';
 import 'package:mynews/features/authentication/domain/model/user_model.dart';
@@ -12,8 +13,10 @@ import 'package:mynews/features/authentication/domain/model/user_model.dart';
 class IAuthenticationImpl implements IAuthenticationFacade {
   final FirebaseAuth _firebaseAuth;
   final FirebaseFirestore _firestore;
+  final LocalStorageServices _localStorageServices;
 
-  IAuthenticationImpl(this._firebaseAuth, this._firestore);
+  IAuthenticationImpl(
+      this._firebaseAuth, this._firestore, this._localStorageServices);
 
 //SIGN IN
   @override
@@ -39,6 +42,9 @@ class IAuthenticationImpl implements IAuthenticationFacade {
         return left(const MainFailure.dataNotFount(
             errorMsg: "No user found.Please SignUp"));
       }
+
+      await _localStorageServices.storeUserId(userCredential.user!.uid);
+
       final user = UserModel.fromJson(userDoc.data()!);
       return right(user);
     } on FirebaseException catch (err) {
@@ -69,7 +75,7 @@ class IAuthenticationImpl implements IAuthenticationFacade {
           .collection(FirebaseCollectionNames.users)
           .doc(userCredential.user!.uid)
           .set(user.toJson());
-
+      await _localStorageServices.storeUserId(userCredential.user!.uid);
       return right(user);
     } on FirebaseException catch (err) {
       return left(MainFailure.serverFailure(errorMsg: err.message.toString()));

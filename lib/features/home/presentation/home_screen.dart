@@ -120,7 +120,7 @@ class HomeScreen extends StatelessWidget {
                 else
                   SliverList.separated(
                       itemBuilder: (context, index) => FadeInLeft(
-                            delay: Duration(milliseconds: index * 100),
+                            delay: Duration(milliseconds: index * 50),
                             child: NewsFrame(news: newsState.newsList[index]),
                           ),
                       separatorBuilder: (context, index) => const Gap(16),
