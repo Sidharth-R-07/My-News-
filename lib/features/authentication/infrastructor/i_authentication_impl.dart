@@ -89,6 +89,7 @@ class IAuthenticationImpl implements IAuthenticationFacade {
   FutureResult<bool> logOut() async {
     try {
       await _firebaseAuth.signOut();
+      await _localStorageServices.clearUserId();
       return right(true);
     } on FirebaseException catch (err) {
       return left(MainFailure.serverFailure(errorMsg: err.message.toString()));

@@ -16,4 +16,10 @@ class LocalStorageServices {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString(userKey);
   }
+
+  //CLEAR USER ID FROM LOCAL
+  Future<bool> clearUserId() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.remove(userKey);
+  }
 }

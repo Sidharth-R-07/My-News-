@@ -14,7 +14,7 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Future.delayed(
-      const Duration(microseconds: 1600),
+      const Duration(seconds: 2),
       () {
         _navigateFn(context);
       },
