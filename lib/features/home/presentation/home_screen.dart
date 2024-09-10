@@ -1,6 +1,8 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:mynews/core/utils/theme/app_colors.dart';
+import 'package:mynews/features/authentication/presentation/widgets/logout_dilogue.dart';
 import 'package:mynews/features/home/application/news_provider.dart';
 import 'package:mynews/features/home/presentation/widgets/news_frame.dart';
 import 'package:provider/provider.dart';
@@ -42,13 +44,17 @@ class HomeScreen extends StatelessWidget {
             iconColor: AppColors.white,
             onSelected: (value) {
               if (value == 0) {
-                //TODO: LOGOUT FUNCTIONALITY
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (_) => const LogoutDilogue(),
+                );
               }
             },
             itemBuilder: (context) => [
               const PopupMenuItem(
                 value: 0,
-                height: 22,
+                height: 30,
                 child: Text("Logout"),
               )
             ],
@@ -77,7 +83,10 @@ class HomeScreen extends StatelessWidget {
                 child: Gap(10),
               ),
               SliverList.separated(
-                  itemBuilder: (context, index) => NewsFrame(),
+                  itemBuilder: (context, index) => FadeInLeft(
+                        delay: Duration(milliseconds: index * 100),
+                        child: NewsFrame(),
+                      ),
                   separatorBuilder: (context, index) => const Gap(16),
                   itemCount: 10),
             ],

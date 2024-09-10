@@ -1,10 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:mynews/core/services/custom_navigation.dart';
 import 'package:mynews/core/services/form_validations.dart';
 import 'package:mynews/core/utils/theme/app_colors.dart';
 import 'package:mynews/core/widgets/custom_button.dart';
 import 'package:mynews/core/widgets/custom_text_field.dart';
 import 'package:mynews/features/authentication/application/authetication_provider.dart';
+import 'package:mynews/features/home/presentation/home_screen.dart';
 import 'package:provider/provider.dart';
 
 class SignUpScreen extends StatelessWidget {
@@ -68,13 +71,34 @@ class SignUpScreen extends StatelessWidget {
                   const Spacer(),
                   CustomButton(
                     onPressed: () => _signUpFn(context),
-                    child: const Text(
-                      "Sign Up",
-                      style: TextStyle(
-                          color: AppColors.white,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16),
-                    ),
+                    child: authState.isLoading
+                        ? const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              CupertinoActivityIndicator(
+                                color: AppColors.white,
+                              ),
+                              Gap(6),
+                              Text(
+                                "Please Wait...",
+                                style: TextStyle(
+                                  color: AppColors.white,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 16,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                              )
+                            ],
+                          )
+                        : const Text(
+                            "Sign Up",
+                            style: TextStyle(
+                                color: AppColors.white,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16),
+                          ),
                   ),
                   const Gap(20),
                   Row(
@@ -104,8 +128,9 @@ class SignUpScreen extends StatelessWidget {
 
   _signUpFn(BuildContext context) {
     final isValid = formkey.currentState!.validate();
-    if (!isValid) return;
-
-    context.read<AutheticationProvider>().signUp();
+    if (!isValid || context.read<AutheticationProvider>().isLoading) return;
+    context.read<AutheticationProvider>().signUp(onSuccess: () {
+      CustomNavigation.pushAndRemoveUntil(context, const HomeScreen());
+    });
   }
 }
