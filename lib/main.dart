@@ -6,14 +6,11 @@ import 'package:mynews/core/utils/theme/app_colors.dart';
 import 'package:mynews/core/utils/theme/app_fonts.dart';
 import 'package:mynews/features/authentication/application/authetication_provider.dart';
 import 'package:mynews/features/authentication/domain/i_authentication_facade.dart';
-import 'package:mynews/features/home/application/news_provider.dart';
-import 'package:mynews/features/home/presentation/home_screen.dart';
+import 'package:mynews/features/news/application/news_provider.dart';
+import 'package:mynews/features/news/domain/i_news_facade.dart';
 import 'package:mynews/features/splash/presentation/splash_screen.dart';
 import 'package:provider/provider.dart';
 
-import 'features/authentication/presentation/sign_in_screen.dart';
-
-//b3dd8953146340a0a79cee3b98b9add7
 Future<void> main() async {
   await configureDependency();
   runApp(const MyApp());
@@ -28,7 +25,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
             create: (_) => AutheticationProvider(sl<IAuthenticationFacade>())),
-        ChangeNotifierProvider(create: (_) => NewsProvider()),
+        ChangeNotifierProvider(create: (_) => NewsProvider(sl<INewsFacade>())),
       ],
       child: MaterialApp(
         title: AppDetails.appName,
