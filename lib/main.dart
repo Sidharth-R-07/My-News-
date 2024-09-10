@@ -4,6 +4,8 @@ import 'package:mynews/core/utils/di/injection.dart';
 import 'package:mynews/core/utils/theme/app_colors.dart';
 import 'package:mynews/core/utils/theme/app_fonts.dart';
 import 'package:mynews/features/authentication/application/authetication_provider.dart';
+import 'package:mynews/features/home/application/news_provider.dart';
+import 'package:mynews/features/home/presentation/home_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'features/authentication/presentation/sign_in_screen.dart';
@@ -22,6 +24,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AutheticationProvider()),
+        ChangeNotifierProvider(create: (_) => NewsProvider()),
       ],
       child: MaterialApp(
         title: AppDetails.appName,
@@ -30,7 +33,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           fontFamily: AppFonts.poppins,
         ),
-        home: SignInScreen(),
+        home: const HomeScreen(),
       ),
     );
   }
